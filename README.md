@@ -1,272 +1,294 @@
-# CraveBot
-## Intelligent Food Classification Hybrid RAG Chatbot and Calorie Awareness Engine
+# CRAVEBOT
+## Hybrid RAG Chatbot for Nutrition Intelligence
+### Dataset-First Retrieval • Fuzzy Systems • Rule Engine • LLM-Augmented Generation
 
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![MachineLearning](https://img.shields.io/badge/Machine%20Learning-Random%20Forest-green)
-![Status](https://img.shields.io/badge/status-active-success)
+![AI](https://img.shields.io/badge/AI-Hybrid%20RAG%20System-green)
+![RAG](https://img.shields.io/badge/Architecture-Dataset--First%20RAG-orange)
+![UI](https://img.shields.io/badge/UI-Gradio-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
-![CI](https://img.shields.io/badge/CI-GitHub%20Actions-orange)
 
 ---
 
-## Overview
+## Executive Summary
 
-CraveBot is an end-to-end machine learning system designed to classify food products
-based on calorie awareness using nutritional information from the OpenFoodFacts dataset.
-The project follows an industrial machine learning workflow and is built to be extended
-into a production-ready API service.
+CraveBot is an industrial-style hybrid AI system that answers nutrition and food-related
+questions using a **dataset-first Retrieval-Augmented Generation (RAG) architecture**.
+It combines **fuzzy retrieval**, **rule-based reasoning**, **fuzzy decision logic**,
+and an **LLM generation layer** (simulated for local execution).
 
----
+Unlike prompt-only chatbots, CraveBot prioritizes **auditable data retrieval** and
+**deterministic reasoning**, with the LLM used strictly for response generation.
 
-## Objectives
-
-- Build a scalable food classification system
-- Process large-scale nutritional datasets
-- Implement a reproducible ML pipeline
-- Enable API-based inference for deployment
+This repository is designed as a **portfolio-grade, recruiter-facing AI systems project**.
 
 ---
 
-## System Architecture
+## Why This Project Matters (Recruiter Focus)
 
-OpenFoodFacts Dataset
-        |
-        v
-Data Cleaning and Preprocessing
-        |
-        v
-Feature Engineering
-        |
-        v
-Model Training (Random Forest)
-        |
-        v
-Evaluation and Inference
-        |
-        v
-API and Deployment Layer
+This project demonstrates the ability to:
+
+- Design **hybrid AI systems**, not just call LLM APIs
+- Implement **dataset-first RAG** instead of prompt-first guessing
+- Handle **uncertainty and missing data** using fuzzy systems and imputation
+- Combine **symbolic rules + statistical ML + generative models**
+- Build **production-style reasoning pipelines** with explainability
+- Ship an **interactive AI application** (Gradio)
 
 ---
 
-## Features
+## Core Architecture Philosophy
 
-- Large-scale dataset ingestion
-- Nutritional feature engineering
-- Binary calorie classification
-- Random Forest machine learning model
-- Model evaluation using accuracy and confusion matrix
-- API-ready inference design
+CraveBot follows a **Dataset → Retrieval → Reasoning → Generation** pipeline.
+
+The LLM does **not** invent facts.
+It only **rephrases verified, structured outputs**.
 
 ---
 
-## Dataset
+## High-Level System Architecture
 
-Source: OpenFoodFacts
+Food Dataset (Parquet / Fallback Table)
+        |
+        v
+Normalization & Preprocessing
+        |
+        v
+Fuzzy Retrieval Engine
+(RapidFuzz / difflib fallback)
+        |
+        v
+Rule Engine & Fuzzy Reasoning
+- Macro rules
+- Calorie thresholds
+- Meal balancing
+- Imputation logic
+        |
+        v
+RAG Context Construction
+(Auditable factual output)
+        |
+        v
+LLM Generation Layer (Simulated)
+        |
+        v
+User-Facing Conversational Response
+        |
+        v
+Gradio Web Interface
 
-Access Method:
-```python
-from datasets import load_dataset
-dataset = load_dataset("openfoodfacts/product-database", split="food")
+---
+
+## Key Components
+
+### 1. Dataset-First Retrieval (RAG)
+
+- Uses a structured food dataset (Parquet preferred)
+- Falls back to an internal curated dataset if unavailable
+- Retrieval happens **before** any generation
+- Every numeric output is traceable to:
+  - Dataset row
+  - Category median
+  - Global median
+
+---
+
+### 2. Fuzzy Matching System
+
+- Primary engine: RapidFuzz (WRatio)
+- Automatic fallback: difflib
+- Handles:
+  - Misspellings
+  - Partial names
+  - Natural language food queries
+
+Confidence levels:
+- High: Direct row match
+- Medium: Category median imputation
+- Low: Global median imputation
+
+---
+
+### 3. Rule Engine & Fuzzy Reasoning
+
+Implemented deterministic rules for:
+
+- High-calorie detection
+- Macro balance evaluation
+- Meal composition advice
+- Food pairing suggestions
+- Healthier alternative retrieval
+- Category-aware reasoning
+
+Example conceptual rules:
+```
+IF energy_kcal_100g > 400 THEN mark as high_calorie
+IF carb-heavy THEN suggest protein + vegetables
+IF fat-heavy THEN recommend portion control
 ```
 
-Selected Features:
-- fat_100g
-- carbohydrates_100g
+---
 
-Target Label:
-- low_calorie (boolean)
+### 4. Imputation & Uncertainty Handling
+
+When data is missing or invalid:
+
+1. Attempt direct row retrieval
+2. Fall back to category medians
+3. Fall back to global medians
+4. Clearly label confidence level
+
+This prevents hallucination while maintaining usability.
 
 ---
 
-## Machine Learning Pipeline
+### 5. RAG Context Construction
 
-1. Load dataset
-2. Handle missing values
-3. Select nutritional features
-4. Train-test split (80/20)
-5. Train Random Forest classifier
-6. Evaluate model performance
-7. Generate predictions
+Before LLM involvement, the system builds a **structured, factual context** containing:
+
+- Exact numeric values
+- Data source
+- Confidence level
+- Explanatory notes
+- Rule-based recommendations
+
+This context is the **only input** to the LLM.
+
+---
+
+### 6. LLM Generation Layer (Simulated)
+
+- LLM step is intentionally **simulated** for local execution
+- Designed to be replaced with:
+  - Phi-3
+  - LLaMA
+  - Gemma
+  - Any production LLM API
+
+LLM responsibilities:
+- Read structured facts
+- Improve readability
+- Add conversational tone
+- Never invent numbers
+
+---
+
+### 7. Interactive Application (Gradio)
+
+- Real-time user queries
+- Execution-time measurement
+- Fuzzy engine status display
+- Example prompts included
+- Production-style UI layout
+
+---
+
+## Supported Query Types
+
+- Nutrient lookup:
+  - "How many calories in 150g chicken breast?"
+- Comparisons:
+  - "Compare protein in banana vs kiwi"
+- Meal planning:
+  - "I have rice and chicken for 500 kcal"
+- Health advice:
+  - "What should I pair with avocado?"
+- General nutrition Q&A with retrieval guarantees
 
 ---
 
 ## Installation
 
 Prerequisites:
-- Python 3.8 or higher
+- Python 3.8+
 - pip
-- Jupyter Notebook
 
 Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip install pandas numpy gradio rapidfuzz pyarrow
 ```
 
-Example requirements.txt:
-```text
-datasets
-pandas
-polars
-pyarrow
-scikit-learn
-fastapi
-uvicorn
-joblib
-```
-
----
-
-## Usage
-
-Launch notebook environment:
+Optional (for Parquet dataset):
 ```bash
-jupyter notebook
+pip install fastparquet
 ```
-
-Open:
-```text
-cravebot.ipynb
-```
-
-Execute all cells sequentially.
 
 ---
 
-## API Documentation
+## Running the Application
 
-Endpoint:
-```text
-POST /predict
-```
-
-Request body:
-```json
-{
-  "fat_100g": 3.5,
-  "carbohydrates_100g": 12.0
-}
-```
-
-Response:
-```json
-{
-  "low_calorie": true,
-  "confidence": 0.87
-}
-```
-
-Minimal FastAPI example:
-```python
-from fastapi import FastAPI
-import joblib
-
-app = FastAPI()
-model = joblib.load("model.joblib")
-
-@app.post("/predict")
-def predict(data: dict):
-    prediction = model.predict([[data["fat_100g"], data["carbohydrates_100g"]]])
-    return {"low_calorie": bool(prediction[0])}
-```
-
-Run API:
 ```bash
-uvicorn app:app --reload
+python cravebot.py
 ```
 
+The Gradio interface will launch in your browser.
+
 ---
 
-## CI CD Pipeline
+## Configuration
 
-GitHub Actions configuration:
-```yaml
-name: CraveBot CI
-
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.10
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run tests
-        run: echo "Add unit tests here"
+```text
+FOOD_DATA_PATH
+FUZZY_CUTOFF_SCORE
 ```
 
----
-
-## Model Evaluation
-
-Metrics:
-- Accuracy
-- Confusion Matrix
-
-Evaluation code:
-```python
-from sklearn.metrics import confusion_matrix
-confusion_matrix(y_test, y_pred)
-```
+- Dataset path can be replaced with any compatible Parquet file
+- Fuzzy threshold controls strictness of retrieval
 
 ---
 
-## Example Predictions
+## Design Guarantees
 
-Fat(g) | Carbs(g) | Prediction
--------|----------|-----------
-3.5    | 12.0     | Low Calorie
-20.0   | 45.0     | Not Low Calorie
-
----
-
-## Troubleshooting
-
-Dataset loading failure:
-- Verify internet connectivity
-
-Memory issues:
-- Use filtered dataset or higher RAM machine
-
-Low accuracy:
-- Add more nutritional features
-- Tune hyperparameters
+- No hallucinated numeric values
+- All outputs are explainable
+- Deterministic reasoning layer
+- LLM isolated from raw data
+- Graceful degradation on missing data
 
 ---
 
 ## Limitations
 
-- Binary classification only
-- Limited nutritional features
-- Notebook-based training
-- No hyperparameter optimization
+- LLM generation is simulated in this environment
+- Rules are heuristic-based (not learned)
+- No vector database (yet)
+- No persistent memory across sessions
 
 ---
 
-## Future Improvements
+## Future Enhancements
 
-- Multi-class nutrition classification
-- Deep learning models
-- Model explainability
-- MLflow experiment tracking
-- Docker and Kubernetes deployment
+- Replace simulated LLM with production API
+- Add vector embeddings for semantic retrieval
+- Introduce learning-based fuzzy rule tuning
+- Add user personalization
+- Deploy via Docker and cloud services
+- Add telemetry and monitoring
+
+---
+
+## Skills Demonstrated
+
+- Hybrid AI system design
+- Retrieval-Augmented Generation (RAG)
+- Fuzzy logic and uncertainty handling
+- Rule-based reasoning systems
+- Data engineering with pandas
+- Explainable AI principles
+- LLM-safe architecture patterns
+- Interactive AI application development
 
 ---
 
 ## Dependencies
 
 ```text
-datasets
+python >= 3.8
 pandas
-polars
+numpy
+gradio
+rapidfuzz (optional, auto-fallback)
 pyarrow
-scikit-learn
-fastapi
-uvicorn
-joblib
 ```
 
 ---
@@ -274,7 +296,7 @@ joblib
 ## Contributors
 
 ```text
-Your Name
+Arafat Zaman Ratul
 ```
 
 ---
